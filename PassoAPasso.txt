@@ -1,0 +1,38 @@
+Dia 10/03/2021 -
+
+1 - Criar um API RESTful em NodeJS
+
+Instalei o Docker no meu pc -
+
+Erro: WSL 2 Installation is incomplete.
+precisei instalar Windows Subsystem ofr Linux Update.
+
+-- Docker
+Criei um PostgressSql com o comando -
+docker run --name postgres -e POSTGRES_PASSWORD=docker -p 5433:5432 -d postgres
+
+
+
+Host: localhost
+Database: postgres
+Port: 5433
+Username: postgres
+Password: docker
+
+-- HapiJs
+npm init
+npm install --save @hapi/hapi
+
+-- TypeORM
+npm install typeorm --save
+npm install reflect-metadata --save
+npm install @types/node --save-dev
+npm install pg --save
+
+-Error 
+Error: Cannot find module 'typescript'
+npm i -g typescript
+
+-- Jest
+npm add jest
+ 
