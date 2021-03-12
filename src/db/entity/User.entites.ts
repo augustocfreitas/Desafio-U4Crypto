@@ -37,5 +37,5 @@ export class UserEntites extends SharedProp {
 
   @OneToOne(() => ClientEntites)
   @JoinColumn()
-  profile: ClientEntites;
+  client: ClientEntites;
 }
