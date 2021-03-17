@@ -25,9 +25,17 @@
 * Jest
 
 ## Instruções de utilização
-npm run start - Comando de inicialização do programa.
-ctrl+c - Comando para parar o programa.
-
+Method: GET; Path: /api/getAllUsers/ ; Return: All Users
+Method: GET; Path: /api/getUser/ ; Params: Id: UserId Return: User (UserId)
+Method: POST; Path: /api/createUser/ ; Params: { userName: new client user name;
+																					password: new client password;
+																					email: new cleint email;
+																				 } Return successful mensage or error mensage;
+Method: POST; Path: /api/deleteUser/ ; Params: { id: Id of Client that will be Deleted
+																				 } Return successful mensage or error mensage;
+Method: POST; Path: /api/updateUser/ ; Params: { id: Id of Client that will be Update
+																					 email: Updated Email
+																				 } Return successful mensage or error mensage;
 ## Histórico de versões
 
 * 0.0.0

@@ -27,6 +27,6 @@ export const routes = [
   {
     method: "POST",
     path: "/api/updateUser/",
-    handler: usersHandler.createUser,
+    handler: usersHandler.updateUser,
   },
 ];

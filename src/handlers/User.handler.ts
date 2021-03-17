@@ -2,6 +2,7 @@ import { ResponseToolkit, getRepository, Request } from "@hapi/hapi";
 import { getConnection, Repository } from "typeorm";
 import { UserEntites } from "../db/entity/User.entites";
 import "reflect-metadata";
+import { resourceLimits } from "node:worker_threads";
 
 const getAllUsers = async (
   request: Request,
@@ -23,7 +24,6 @@ const getUserByID = async (
 ) => {
   const params = request.query;
   const idBusca = params.id;
-  console.log(idBusca);
   const user = await getConnection()
     .createQueryBuilder()
     .select("user")
@@ -43,19 +43,28 @@ const createUser = async (
   var userName = params.userName;
   var password = params.password;
   var email = params.email;
+  var result = "";
   const userRepo: Repository<UserEntites> = getConnection().getRepository(
     UserEntites
   );
+
   const novoUser = userRepo.create({
     user: userName,
     password: password,
     email: email,
   });
-  userRepo.save(novoUser).catch((err) => {
-    console.log(err);
-  });
 
-  return novoUser;
+  await userRepo
+    .save(novoUser)
+    .then(() => {
+      result += "Usuario Criado com sucesso";
+    })
+    .catch((err) => {
+      result += "Erro ao criar usuario, Erro:" + err;
+      console.log(result);
+    });
+
+  return result;
 };
 
 const deleteUser = async (
@@ -65,13 +74,22 @@ const deleteUser = async (
 ) => {
   const params = request.query;
   const idDelete = params.id;
+  var result = "";
   const userRepo: Repository<UserEntites> = getConnection().getRepository(
     UserEntites
   );
+
   const userRemove = await userRepo.findOne({ id: Number(idDelete) });
-  console.log(userRemove.user);
-  userRepo.remove(userRemove);
-  return "Usuario deletado com Sucesso!";
+
+  await userRepo
+    .remove(userRemove)
+    .then(() => {
+      result += "Usuario Deletado com sucesso!";
+    })
+    .catch((err) => {
+      result += "Erro ao Deletar usuario, Erro:" + err;
+    });
+  return result;
 };
 
 const updateUser = async (
@@ -81,18 +99,29 @@ const updateUser = async (
 ) => {
   const params = request.query;
   const idUpdate = params.id;
-  const novoEmail = params.email;
-  await getConnection()
-    .createQueryBuilder()
-    .update(UserEntites)
-    .set({ email: novoEmail })
-    .where("id = :id", { id: Number(idUpdate) })
-    .execute();
+  const novoEmail = String(params.email);
+  var result = "";
 
   const userRepo: Repository<UserEntites> = getConnection().getRepository(
     UserEntites
   );
-  return userRepo.findOne({ id: Number(idUpdate) });
+
+  console.log(novoEmail);
+  await userRepo
+    .createQueryBuilder()
+    .update(UserEntites)
+    .set({
+      email: novoEmail,
+    })
+    .where("id = :id", { id: idUpdate })
+    .execute()
+    .then(() => {
+      result += "Update de Usuario feito com sucesso!";
+    })
+    .catch((err) => {
+      result += "Erro ao fazer Update usuario, Erro:" + err;
+    });
+  return result;
 };
 
 export = {
